@@ -1,0 +1,1 @@
+protoc --plugin=protoc-gen-as3=..\_libs\protoc-gen-as3\bin\protoc-gen-as3.bat --as3_out=src net.proto
