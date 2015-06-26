@@ -23,5 +23,8 @@ public class Hero
 	{
 		this._body.setPosition(x, y);
 	}
+	public function jump():void{
+
+	}
 }
 }

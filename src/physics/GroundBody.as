@@ -13,16 +13,16 @@ import Box2D.Dynamics.b2World;
 
 public class GroundBody
 {
-	private static const HERO_DEFENITION:b2BodyDef = new b2BodyDef();
+	private static const GROUND_DEFENITION:b2BodyDef = new b2BodyDef();
 	{
-		HERO_DEFENITION.type = b2Body.b2_staticBody;
+		GROUND_DEFENITION.type = b2Body.b2_staticBody;
 	}
 
 	private var _body:b2Body;
 
 	public function GroundBody(world:b2World, fixture:b2FixtureDef)
 	{
-		this._body = world.CreateBody(HERO_DEFENITION);
+		this._body = world.CreateBody(GROUND_DEFENITION);
 		this._body.CreateFixture(fixture);
 	}
 }

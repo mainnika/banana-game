@@ -3,8 +3,14 @@
  */
 package logic
 {
+import Box2D.Dynamics.b2FixtureDef;
+
 import flash.display.Sprite;
 import flash.events.Event;
+
+import helpers.MapCreator;
+
+import physics.GroundBody;
 
 import physics.WorldBody;
 
@@ -48,6 +54,8 @@ public class Game extends Sprite
 
 	public function createMap(data:String):void
 	{
+		var fixtures_def:Vector.<b2FixtureDef>=MapCreator.parse(data);
+		var gb:GroundBody=new GroundBody(_world.body,fixtures_def[0]);
 
 	}
 

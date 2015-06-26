@@ -31,7 +31,7 @@ public class Main extends Sprite {
 		game.createMap("[[[100,500], [700,500], [700, 550], [100, 550]]]");
 
 
-		MapCreator.parse("[1,2,3,4]");
+		//MapCreator.parse("[[[100,500], [700,500], [700, 550], [100, 550]]]");
 
 
 //		var m_sprite:Sprite=this;
