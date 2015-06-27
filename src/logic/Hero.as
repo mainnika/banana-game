@@ -3,14 +3,21 @@
  */
 package logic
 {
+import graphic.$.IRenderable;
+
+import graphic.Animation;
+
+import helpers.StaticAssets;
+
 import physics.HeroBody;
 
-public class Hero
+public class Hero extends Animation implements IRenderable
 {
 	private var _body:HeroBody;
 
 	public function Hero(game:Game)
 	{
+		super(StaticAssets.instance().getTextures("banana_"));
 		this._body = new HeroBody(game.world.body);
 	}
 
@@ -23,5 +30,13 @@ public class Hero
 	{
 		this._body.setPosition(x, y);
 	}
+
+	public function draw():void
+	{
+		this.x = this._body.x;
+		this.y = this._body.y;
+		this.rotation = this._body.angle;
+	}
+
 }
 }

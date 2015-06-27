@@ -11,6 +11,8 @@ import Box2D.Dynamics.b2BodyDef;
 import Box2D.Dynamics.b2FixtureDef;
 import Box2D.Dynamics.b2World;
 
+import flash.system.WorkerState;
+
 public class HeroBody
 {
 
@@ -41,6 +43,21 @@ public class HeroBody
 	public function setPosition(x:int, y:int):void
 	{
 		this._body.SetPosition(new b2Vec2(x / WorldBody.PHYS_SCALE, y / WorldBody.PHYS_SCALE));
+	}
+
+	public function get x():Number
+	{
+		return this._body.GetPosition().x * WorldBody.PHYS_SCALE;
+	}
+
+	public function get y():Number
+	{
+		return this._body.GetPosition().y * WorldBody.PHYS_SCALE;
+	}
+
+	public function get angle():Number
+	{
+		return this._body.GetAngle();
 	}
 }
 }

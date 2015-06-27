@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:5087741a330d1d96255840fd8a3934cb:51704918827674a8e7b3c3be4ea5fcce:88a3d19c582d7c9c6b7e9cae4b77aa74$ -->
+<TextureAtlas imagePath="banana.png">
+    <SubTexture name="banana_1" x="2" y="2" width="50" height="100"/>
+    <SubTexture name="banana_2" x="2" y="104" width="50" height="100"/>
+    <SubTexture name="banana_3" x="2" y="206" width="50" height="100"/>
+    <SubTexture name="banana_4" x="2" y="308" width="50" height="100"/>
+    <SubTexture name="banana_5" x="2" y="206" width="50" height="100"/>
+    <SubTexture name="banana_6" x="2" y="104" width="50" height="100"/>
+</TextureAtlas>
