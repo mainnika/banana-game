@@ -3,9 +3,6 @@
  */
 package physics
 {
-import Box2D.Collision.Shapes.b2CircleShape;
-import Box2D.Collision.Shapes.b2PolygonShape;
-import Box2D.Collision.Shapes.b2Shape;
 import Box2D.Dynamics.b2Body;
 import Box2D.Dynamics.b2BodyDef;
 import Box2D.Dynamics.b2FixtureDef;
@@ -22,6 +19,9 @@ public class GroundBody
 
 	public function GroundBody(world:b2World, fixture:b2FixtureDef)
 	{
+		fixture.filter.categoryBits = WorldBody.CATEGORY_GROUND;
+		fixture.filter.maskBits = WorldBody.CATEGORY_HERO | WorldBody.CATEGORY_FOOTS;
+
 		this._body = world.CreateBody(GROUND_DEFENITION);
 		this._body.CreateFixture(fixture);
 	}

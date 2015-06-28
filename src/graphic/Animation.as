@@ -18,7 +18,7 @@ public class Animation extends MovieClip
 		this.play();
 
 		this.pivotX = this.width / 2;
-		this.pivotY = this.height;
+		this.pivotY = this.height - 40;
 
 		Starling.juggler.add(this);
 	}
