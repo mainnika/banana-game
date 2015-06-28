@@ -23,12 +23,16 @@ public class Root extends Sprite
 		this._game = new Game();
 		this._controller = new KeyboardController(this);
 
-		this._game.createMap("[[[100,500], [700,300], [700, 550], [100, 550]]]");
+		this._game.createMap("[" +
+			"[[300,500], [700,300], [700, 550]]," +
+			"[[400,160], [700,160], [550, 300]]," +
+			"[[100,100], [400,100], [100, 200]]" +
+		"]");
 
 		var hero:Hero = this._game.createHero();
 
 		this._controller.pairHero(hero);
-		hero.setPosition(400, 300);
+		this._game.heroRespawn(hero);
 
 		this.addChild(this._game);
 	}

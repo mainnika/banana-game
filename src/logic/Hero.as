@@ -29,6 +29,12 @@ public class Hero extends Animation implements IRenderable, IControllable
 		return _body;
 	}
 
+	public function respawn():void
+	{
+		this._body.resetVelocity();
+		this._body.resetAngle();
+	}
+
 	public function setPosition(x:int, y:int):void
 	{
 		this._body.setPosition(x, y);
@@ -39,6 +45,15 @@ public class Hero extends Animation implements IRenderable, IControllable
 		this.x = this._body.x;
 		this.y = this._body.y;
 		this.rotation = this._body.angle;
+	}
+
+	public function onDie(callback:Function):void
+	{
+		var self:Hero = this;
+		this._body.signals.die.add(function ():void
+		{
+			callback(self);
+		});
 	}
 
 	public function attachController(controller:IController):void

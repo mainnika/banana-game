@@ -11,6 +11,8 @@ import Box2D.Dynamics.b2Body;
 import Box2D.Dynamics.b2BodyDef;
 import Box2D.Dynamics.b2FixtureDef;
 
+import org.osflash.signals.Signal;
+
 import physics.$.ISteppable;
 
 public class HeroBody implements ISteppable
@@ -63,6 +65,10 @@ public class HeroBody implements ISteppable
 	private var _foots:b2Body;
 	private var _inputs:Vector.<Boolean>;
 	private var _groundContacts:int;
+
+	private var _signals:Object = {
+		die: new Signal()
+	};
 
 	public function HeroBody(world:WorldBody)
 	{
@@ -121,10 +127,28 @@ public class HeroBody implements ISteppable
 		return point;
 	}
 
+	public function resetVelocity():void
+	{
+		this._body.SetLinearVelocity(new b2Vec2(0, 0));
+	}
+
+	public function resetAngle():void
+	{
+		this._body.SetAngle(0);
+	}
+
 	public function setPosition(x:int, y:int):void
 	{
 		this._body.SetPosition(new b2Vec2(x / WorldBody.PHYS_SCALE, y / WorldBody.PHYS_SCALE));
 		this._foots.SetPosition(this._body.GetPosition());
+	}
+
+	public function checkDie():void
+	{
+		if (this.y > 600)
+		{
+			this._signals.die.dispatch();
+		}
 	}
 
 	public function get x():Number
@@ -142,6 +166,11 @@ public class HeroBody implements ISteppable
 		return this._body.GetAngle();
 	}
 
+	public function get signals():Object
+	{
+		return this._signals;
+	}
+
 	public function jump():void
 	{
 		if (this._groundContacts == 0)
@@ -149,6 +178,7 @@ public class HeroBody implements ISteppable
 
 		var force:Number = 50;
 		var angle:Number = this.angle;
+
 		var impulse:b2Vec2 = new b2Vec2(Math.sin(angle) * force, -Math.cos(angle) * force);
 		var point:b2Vec2 = this._body.GetWorldCenter();
 
@@ -162,6 +192,8 @@ public class HeroBody implements ISteppable
 
 	public function step():void
 	{
+		this.checkDie();
+
 		if (this._groundContacts == 0)
 			return;
 

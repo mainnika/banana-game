@@ -59,6 +59,12 @@ public class Game extends RenderableScene
 		this.renderScene();
 	}
 
+	public function heroRespawn(hero:Hero):void
+	{
+		hero.setPosition(200, 0);
+		hero.respawn();
+	}
+
 	public function createHero():Hero
 	{
 		var hero:Hero = new Hero(this);
@@ -66,14 +72,24 @@ public class Game extends RenderableScene
 		this.addChild(hero);
 		this.addRenderableObject(hero);
 
+		hero.onDie(this.onHeroDie);
+
 		return hero;
+	}
+
+	public function onHeroDie(hero:Hero):void
+	{
+		this.heroRespawn(hero);
 	}
 
 	public function createMap(data:String):void
 	{
-		var fixtures_def:Vector.<b2FixtureDef> = MapCreator.parse(data);
-		var gb:GroundBody = new GroundBody(_world.body, fixtures_def[0]);
+		var fixture_defs:Vector.<b2FixtureDef> = MapCreator.parse(data);
 
+		fixture_defs.forEach(function (fixture:b2FixtureDef, index:int, vector:Vector.<b2FixtureDef>):void
+		{
+			new GroundBody(this._world.body, fixture);
+		}, this);
 	}
 
 	public function get world():WorldBody

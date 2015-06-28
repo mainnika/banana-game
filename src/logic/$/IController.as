@@ -14,7 +14,5 @@ public interface IController
 	function eventDown(e:KeyboardEvent):void;
 
 	function eventUp(e:KeyboardEvent):void;
-
-
 }
 }
