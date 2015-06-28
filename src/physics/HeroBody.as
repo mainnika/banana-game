@@ -166,6 +166,28 @@ public class HeroBody implements ISteppable
 		return this._body.GetAngle();
 	}
 
+	public function get jumping():Boolean
+	{
+		return this._groundContacts == 0;
+	}
+
+	public function get moving():Boolean
+	{
+		if (this._groundContacts == 0)
+			return false;
+
+		var speed:b2Vec2 = this._body.GetLinearVelocity();
+
+		return speed.x > 0.1 || speed.x < -0.1;
+	}
+
+	public function get rightward():Boolean
+	{
+		var speed:b2Vec2 = this._body.GetLinearVelocity();
+
+		return speed.x > 0;
+	}
+
 	public function get signals():Object
 	{
 		return this._signals;

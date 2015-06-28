@@ -34,15 +34,21 @@ public class KeyboardController implements IController
 	{
 		var key:int = e.keyCode;
 
+		trace(key);
+
 		switch (key)
 		{
 			case 87:
+			case 32:
+			case 38:
 				this._hero.up(true);
 				break;
 			case 68:
+			case 39:
 				this._hero.right(true);
 				break;
 			case 65:
+			case 37:
 				this._hero.left(true);
 				break;
 		}
@@ -55,9 +61,11 @@ public class KeyboardController implements IController
 		switch (key)
 		{
 			case 68:
+			case 39:
 				this._hero.right(false);
 				break;
 			case 65:
+			case 37:
 				this._hero.left(false);
 				break;
 		}

@@ -45,6 +45,14 @@ public class Hero extends Animation implements IRenderable, IControllable
 		this.x = this._body.x;
 		this.y = this._body.y;
 		this.rotation = this._body.angle;
+
+		if (this.isPlaying && !this._body.moving)
+			this.pause();
+
+		if (!this.isPlaying && this._body.moving)
+			this.play();
+
+		this.scaleX = this._body.rightward ? -1 : 1;
 	}
 
 	public function onDie(callback:Function):void
