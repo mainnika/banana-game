@@ -13,10 +13,12 @@ import org.osflash.signals.Signal;
 public class CollideSensor extends b2ContactListener
 {
 	private var _ground:Signal;
+	private var _hero:Signal;
 
 	public function CollideSensor()
 	{
 		this._ground = new Signal(b2Body, Boolean);
+		this._hero = new Signal(b2Body, Boolean);
 	}
 
 	private function contactDispatcher(self:int, other:b2Fixture, isBegin:Boolean):void
@@ -25,6 +27,9 @@ public class CollideSensor extends b2ContactListener
 		{
 			case WorldBody.CATEGORY_GROUND:
 				this._ground.dispatch(other.GetBody(), isBegin);
+				break;
+			case WorldBody.CATEGORY_HERO:
+				this._hero.dispatch(other.GetBody(), isBegin);
 				break;
 		}
 	}
@@ -48,6 +53,11 @@ public class CollideSensor extends b2ContactListener
 	public function get ground():Signal
 	{
 		return this._ground;
+	}
+
+	public function get hero():Signal
+	{
+		return this._hero;
 	}
 }
 }

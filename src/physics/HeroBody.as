@@ -3,6 +3,7 @@
  */
 package physics
 {
+import Box2D.Collision.Shapes.b2CircleShape;
 import Box2D.Collision.Shapes.b2MassData;
 import Box2D.Collision.Shapes.b2PolygonShape;
 import Box2D.Common.Math.b2Vec2;
@@ -19,6 +20,7 @@ public class HeroBody implements ISteppable
 {
 
 	private static const HERO_RADIUS:Number = 10 / WorldBody.PHYS_SCALE;
+
 	private static const HERO_DEFENITION:b2BodyDef = new b2BodyDef();
 	{
 		HERO_DEFENITION.type = b2Body.b2_dynamicBody;
@@ -34,19 +36,15 @@ public class HeroBody implements ISteppable
 		HERO_SHAPE.SetAsBox(HERO_RADIUS, HERO_RADIUS * 4);
 	}
 
-	private static const FOOTS_SHAPE:b2PolygonShape = new b2PolygonShape();
-	{
-		FOOTS_SHAPE.SetAsBox(HERO_RADIUS / 2, HERO_RADIUS / 2);
-	}
+	private static const FOOTS_SHAPE:b2CircleShape = new b2CircleShape(HERO_RADIUS);
 
 	private static const HERO_FIXTURE:b2FixtureDef = new b2FixtureDef();
 	{
 		HERO_FIXTURE.shape = HERO_SHAPE;
-//		HERO_FIXTURE.density = 10;
 		HERO_FIXTURE.friction = 2;
 		HERO_FIXTURE.restitution = 0;
 		HERO_FIXTURE.filter.categoryBits = WorldBody.CATEGORY_HERO;
-		HERO_FIXTURE.filter.maskBits = WorldBody.CATEGORY_GROUND;
+		HERO_FIXTURE.filter.maskBits = WorldBody.CATEGORY_GROUND | WorldBody.CATEGORY_HERO;
 	}
 
 	private static const FOOTS_FIXTURE:b2FixtureDef = new b2FixtureDef();
@@ -54,7 +52,7 @@ public class HeroBody implements ISteppable
 		FOOTS_FIXTURE.shape = FOOTS_SHAPE;
 		FOOTS_FIXTURE.isSensor = true;
 		FOOTS_FIXTURE.filter.categoryBits = WorldBody.CATEGORY_FOOTS;
-		FOOTS_FIXTURE.filter.maskBits = WorldBody.CATEGORY_GROUND;
+		FOOTS_FIXTURE.filter.maskBits = WorldBody.CATEGORY_GROUND | WorldBody.CATEGORY_HERO;
 	}
 
 	public static const INPUT_RIGHT:int = 0;
@@ -65,6 +63,7 @@ public class HeroBody implements ISteppable
 	private var _foots:b2Body;
 	private var _inputs:Vector.<Boolean>;
 	private var _groundContacts:int;
+	private var _lastInput:int;
 
 	private var _signals:Object = {
 		die: new Signal()
@@ -90,7 +89,9 @@ public class HeroBody implements ISteppable
 		joint.collideConnected = false;
 
 		world.body.CreateJoint(joint);
+
 		world.sensor.ground.add(this.groundContact);
+		world.sensor.hero.add(this.groundContact);
 
 		var massData:b2MassData = new b2MassData();
 
@@ -183,9 +184,7 @@ public class HeroBody implements ISteppable
 
 	public function get rightward():Boolean
 	{
-		var speed:b2Vec2 = this._body.GetLinearVelocity();
-
-		return speed.x > 0;
+		return this._lastInput == INPUT_RIGHT;
 	}
 
 	public function get signals():Object
@@ -219,19 +218,31 @@ public class HeroBody implements ISteppable
 		if (this._groundContacts == 0)
 			return;
 
+		var hasInput:Boolean = this._inputs[INPUT_RIGHT] || this._inputs[INPUT_LEFT];
+
+		if (!hasInput)
+			return;
+
 		var force:Number = 3;
 		var forceLimit:Number = force * 3;
 
 		var impulse:b2Vec2 = this._body.GetLinearVelocity();
 
-		if (this._inputs[INPUT_RIGHT])
-			impulse.x += Math.max(force, impulse.x);
-
 		if (this._inputs[INPUT_LEFT])
+		{
 			impulse.x -= Math.max(force, impulse.x);
+			this._lastInput = INPUT_LEFT;
+		}
+
+		if (this._inputs[INPUT_RIGHT])
+		{
+			impulse.x += Math.max(force, impulse.x);
+			this._lastInput = INPUT_RIGHT;
+		}
 
 		impulse.x = Math.max(impulse.x, -forceLimit);
 		impulse.x = Math.min(impulse.x, forceLimit);
+
 
 		this._body.SetLinearVelocity(impulse);
 	}
