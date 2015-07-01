@@ -36,7 +36,10 @@ public class HeroBody implements ISteppable
 		HERO_SHAPE.SetAsBox(HERO_RADIUS, HERO_RADIUS * 4);
 	}
 
-	private static const FOOTS_SHAPE:b2CircleShape = new b2CircleShape(HERO_RADIUS);
+	private static const FOOTS_SHAPE:b2PolygonShape = new b2PolygonShape();
+	{
+		FOOTS_SHAPE.SetAsBox(HERO_RADIUS, HERO_RADIUS);
+	}
 
 	private static const HERO_FIXTURE:b2FixtureDef = new b2FixtureDef();
 	{
@@ -144,12 +147,15 @@ public class HeroBody implements ISteppable
 		this._foots.SetPosition(this._body.GetPosition());
 	}
 
-	public function checkDie():void
+	public function checkDie():Boolean
 	{
 		if (this.y > 600)
 		{
 			this._signals.die.dispatch();
+			return true;
 		}
+
+		return false;
 	}
 
 	public function get x():Number
@@ -174,7 +180,7 @@ public class HeroBody implements ISteppable
 
 	public function get moving():Boolean
 	{
-		if (this._groundContacts == 0)
+		if (this.jumping)
 			return false;
 
 		var speed:b2Vec2 = this._body.GetLinearVelocity();
@@ -194,7 +200,7 @@ public class HeroBody implements ISteppable
 
 	public function jump():void
 	{
-		if (this._groundContacts == 0)
+		if (this.jumping)
 			return;
 
 		var force:Number = 50;
@@ -213,9 +219,10 @@ public class HeroBody implements ISteppable
 
 	public function step():void
 	{
-		this.checkDie();
+		if (this.checkDie())
+			return;
 
-		if (this._groundContacts == 0)
+		if (this.jumping)
 			return;
 
 		var hasInput:Boolean = this._inputs[INPUT_RIGHT] || this._inputs[INPUT_LEFT];
